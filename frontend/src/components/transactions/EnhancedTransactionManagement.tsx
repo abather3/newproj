@@ -68,7 +68,7 @@ import { Transaction, DailyReport, Expense, Fund, PaymentMode, PaymentStatus, Us
 import { useAuth } from '../../contexts/AuthContext';
 import { useSocket } from '../../contexts/SocketContext';
 import TransactionApi from '../../services/transactionApi';
-import * as XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
@@ -753,7 +753,7 @@ const EnhancedTransactionManagement: React.FC = () => {
       
       switch (format) {
         case 'excel':
-          exportToExcel(reportData, filename);
+          await exportToExcel(reportData, filename);
           break;
         case 'pdf':
           exportToPDF(reportData, filename);
@@ -772,8 +772,12 @@ const EnhancedTransactionManagement: React.FC = () => {
     }
   };
 
-  const exportToExcel = (data: any, filename: string) => {
-    // Create summary sheet
+  const exportToExcel = async (data: any, filename: string) => {
+    // Create a new workbook
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Daily Report');
+    
+    // Add summary data
     const summaryData = [
       ['Daily Report Summary'],
       ['Date', new Date(data.date).toLocaleDateString()],
@@ -799,19 +803,25 @@ const EnhancedTransactionManagement: React.FC = () => {
       ['Total Funds', `₱${data.totalFunds.toLocaleString()}`]
     ];
     
-    const ws = XLSX.utils.aoa_to_sheet(summaryData);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Daily Report');
+    // Add rows to worksheet
+    summaryData.forEach((row, index) => {
+      worksheet.addRow(row);
+    });
     
     // Style the header
-    if (ws['A1']) {
-      ws['A1'].s = {
-        font: { bold: true, sz: 16 },
-        alignment: { horizontal: 'center' }
-      };
-    }
+    const headerCell = worksheet.getCell('A1');
+    headerCell.font = { bold: true, size: 16 };
+    headerCell.alignment = { horizontal: 'center' };
     
-    XLSX.writeFile(wb, `${filename}.xlsx`);
+    // Generate buffer and download
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${filename}.xlsx`;
+    link.click();
+    URL.revokeObjectURL(url);
   };
 
   const exportToPDF = (data: any, filename: string) => {

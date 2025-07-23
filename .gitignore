@@ -173,3 +173,52 @@ start-local.sh
 # Custom scripts that might contain sensitive data
 setup-*.ps1
 test-*.js
+
+# Additional security patterns
+# API keys and secrets
+.secrets
+*.secrets
+config/secrets.json
+config/keys.json
+
+# Docker secrets
+docker-compose.override.yml
+docker-compose.local.yml
+
+# Railway and deployment configs with potential secrets
+.railway
+vercel.json
+
+# JWT and other tokens
+*.jwt
+*.token
+
+# Private SSH keys
+id_rsa
+id_dsa
+id_ecdsa
+id_ed25519
+*.ppk
+
+# MacOS specific
+.AppleDouble
+.LSOverride
+
+# Windows specific  
+Desktop.ini
+$RECYCLE.BIN/
+
+# Temporary and cache files
+.cache/
+.tmp/
+*.tmp
+*.temp
+
+# Editor backups
+*~
+*.orig
+*.rej
+
+# Dependency lock files (uncomment if needed)
+# yarn.lock
+# pnpm-lock.yaml
