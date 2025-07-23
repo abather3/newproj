@@ -1,8 +1,9 @@
 [build]
-builder = "DOCKERFILE"
-dockerfilePath = "frontend/Dockerfile"
+builder = "NIXPACKS"
+buildCommand = "cd frontend && cp -r public/* ../public/ 2>/dev/null || true && npm install && npm run build"
 
 [deploy]
+startCommand = "cd frontend && npx serve -s build -l 3000"
 healthcheckPath = "/"
 healthcheckTimeout = 300
 restartPolicyType = "ON_FAILURE"
