@@ -11,8 +11,8 @@
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:backend": "npm run dev --workspace=backend",
     "dev:frontend": "npm run dev --workspace=frontend",
-    "build": "npm run build --workspace=backend && npm run build --workspace=frontend",
-    "start": "npm start --workspace=backend",
+    "build": "npm run build --workspace=frontend",
+    "start": "cd frontend && npx serve -s build -l 3000",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:debug": "playwright test --debug",
@@ -30,6 +30,7 @@
     "bcrypt": "^6.0.0",
     "node-fetch": "^3.3.2",
     "pg": "^8.16.3",
-    "ws": "^8.18.3"
+    "ws": "^8.18.3",
+    "serve": "^14.2.1"
   }
 }
