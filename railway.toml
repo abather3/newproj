@@ -3,7 +3,7 @@
 # Database should be added separately as PostgreSQL service in Railway dashboard
 
 [build]
-builder = "NIXPACKS"
+builder = "dockerfile"
 
 [deploy]
 healthcheckPath = "/health"
