@@ -26,6 +26,7 @@ healthcheckPath = "/health"
 
 [services.escashop-backend.variables]
 NODE_ENV = "production"
+NODE_VERSION = "20"
 PORT = "5000"
 
 # Frontend service configuration
@@ -41,3 +42,4 @@ startCommand = "npx serve -s build -l 3000"
 
 [services.escashop-frontend.variables]
 NODE_ENV = "production"
+NODE_VERSION = "20"

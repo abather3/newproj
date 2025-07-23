@@ -20,6 +20,7 @@
     "migrate": "node dist/migrate.js",
     "migrate:dev": "npx ts-node src/migrate.ts",
     "migrate:railway": "node migrate-railway.js",
+    "migrate:deploy": "node deploy-migrate.js",
     "test:scheduler": "npx ts-node src/scripts/test-scheduler.ts",
     "lint": "eslint src --ext .ts,.js",
     "lint:security": "eslint src --config eslint.config.js",
