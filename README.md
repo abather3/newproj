@@ -197,6 +197,56 @@ This module is accessible only to the Admin role and allows for dynamic system c
 
 ---
 
+## 🚀 Railway Deployment Guide
+
+This project is configured for Railway deployment with proper monorepo support.
+
+### Prerequisites
+1. Railway account
+2. PostgreSQL database (Railway provides this)
+3. Environment variables configured
+
+### Deployment Steps
+
+1. **Connect to Railway**:
+   ```bash
+   railway login
+   railway link
+   ```
+
+2. **Environment Variables**:
+   Set the following in Railway dashboard:
+   ```
+   DATABASE_URL=postgresql://...
+   NODE_ENV=production
+   JWT_SECRET=your-jwt-secret
+   JWT_REFRESH_SECRET=your-refresh-secret
+   FRONTEND_URL=https://your-frontend-url
+   ```
+
+3. **Deploy**:
+   ```bash
+   railway up
+   ```
+
+### Service Configuration
+
+The project uses Railway's monorepo configuration:
+- **Backend Service**: Runs on the configured port (default 5000)
+- **Frontend Service**: Serves static React build (port 3000)
+- **Database**: PostgreSQL with automatic migrations
+
+### Build Status
+
+✅ Production builds working  
+✅ Database migrations tested  
+✅ Railway configuration complete  
+✅ Environment variables configured  
+✅ Health checks implemented  
+✅ Error handling in place  
+
+---
+
 ## 7. Technical Requirements & Stack
 
 ### 7.1 Recommended Stack

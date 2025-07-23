@@ -1,0 +1,27 @@
+[build]
+builder = "NIXPACKS"
+
+[deploy]
+healthcheckPath = "/health"
+healthcheckTimeout = 300
+restartPolicyType = "ON_FAILURE"
+
+# Backend service configuration
+[[services]]
+name = "backend"
+source = "backend"
+build = { buildCommand = "npm run build" }
+deploy = { startCommand = "npm start" }
+
+[services.variables]
+NODE_ENV = "production"
+
+# Frontend service configuration  
+[[services]]
+name = "frontend"
+source = "frontend"
+build = { buildCommand = "npm run build" }
+deploy = { startCommand = "npx serve -s build -l 3000" }
+
+[services.variables]
+NODE_ENV = "production"
