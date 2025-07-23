@@ -4,11 +4,8 @@ FROM node:20
 # Set the working directory
 WORKDIR /app
 
-# Copy the entire repo content
-COPY . .
-
-# Set working directory to frontend
-WORKDIR /app/frontend
+# Copy the frontend directory specifically
+COPY frontend ./
 
 # Install dependencies
 RUN npm install
