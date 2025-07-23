@@ -5,10 +5,15 @@ NODE_VERSION = "20"
 nixPkgs = ["nodejs_20", "npm-9_x"]
 
 [phases.install]
-cmds = ["npm ci"]
+cmds = [
+  "cp frontend/package*.json .",
+  "cp -r frontend/src .",
+  "cp -r frontend/public .",
+  "npm ci"
+]
 
 [phases.build]
 cmds = ["npm run build"]
 
 [phases.start]
-cmd = "npm start"
+cmd = "npx serve -s build -l 3000"
