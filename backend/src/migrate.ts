@@ -10,7 +10,33 @@ async function runMigrations() {
     // Ensure database connection is established
     await connectDatabase();
     
-    // First, run SQL migrations from root database directory
+    // First, check if database is initialized by checking if users table exists
+    const checkQuery = `
+      SELECT EXISTS (
+        SELECT 1 FROM information_schema.tables 
+        WHERE table_name = 'users'
+      ) as table_exists;
+    `;
+    
+    const result = await pool.query(checkQuery);
+    const isInitialized = result.rows[0].table_exists;
+    
+    if (!isInitialized) {
+      console.log('Database not initialized. Running complete migration...');
+      const completeMigrationPath = path.join(__dirname, 'database', 'complete-migration.sql');
+      try {
+        const sql = fs.readFileSync(completeMigrationPath, { encoding: 'utf-8' });
+        await pool.query(sql);
+        console.log('✓ Completed: complete-migration.sql');
+      } catch (error) {
+        console.error('✗ Failed to run complete migration:', error);
+        throw error;
+      }
+    } else {
+      console.log('Database already initialized, skipping complete migration');
+    }
+    
+    // Then run any additional SQL migrations from root database directory
     const databasePath = path.join(__dirname, 'database');
     let rootFiles: string[] = [];
     

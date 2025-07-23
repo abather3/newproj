@@ -1,0 +1,15 @@
+[variables]
+NODE_VERSION = "20"
+
+[phases]
+[phases.setup]
+nixPkgs = ['nodejs_20', 'npm-9_x']
+
+[phases.install]
+cmds = ['cd frontend && npm install']
+
+[phases.build]
+cmds = ['cd frontend && npm run build']
+
+[phases.start]
+cmd = 'cd frontend && npx serve -s build -l 3000'

@@ -2,8 +2,12 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "dist/index.js",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && node scripts/copy-sql.js",
     "build:prod": "npx tsc -p tsconfig.prod.json",
     "dev": "nodemon src/index.ts",
     "start": "npm run migrate && node dist/index.js",
