@@ -7,10 +7,9 @@ nixPkgs = ["nodejs_20", "npm-9_x"]
 [phases.install]
 cmds = [
   "cp frontend/package.json .",
-  "cp frontend/package-lock.json .",
   "cp -r frontend/src .",
   "cp -r frontend/public .",
-  "npm ci"
+  "npm install"
 ]
 
 [phases.build]
