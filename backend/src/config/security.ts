@@ -16,8 +16,14 @@ export const databaseSecurityConfig: PoolConfig = {
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
   
-  // Security settings
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+  // Security settings - Enforce SSL in production with proper certificate validation
+  ssl: process.env.NODE_ENV === 'production' ? {
+    rejectUnauthorized: process.env.DB_SSL_REJECT_UNAUTHORIZED !== 'false',
+    ca: process.env.DB_SSL_CA, // Certificate Authority certificate
+    cert: process.env.DB_SSL_CERT, // Client certificate
+    key: process.env.DB_SSL_KEY, // Client private key
+    servername: process.env.DB_SSL_SERVERNAME // Server name for certificate validation
+  } : false,
   
   // Query logging - enable in production for monitoring
   ...(process.env.NODE_ENV === 'production' && {

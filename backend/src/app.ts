@@ -23,10 +23,29 @@ import { errorHandler } from './middleware/errorHandler';
 
 const app: express.Application = express();
 const server = createServer(app);
+// Configure allowed origins based on environment
+const getAllowedOrigins = () => {
+  const baseOrigins = [process.env.FRONTEND_URL || 'http://localhost:3000'];
+  
+  // Add additional origins from environment variable
+  if (process.env.CORS_ADDITIONAL_ORIGINS) {
+    const additionalOrigins = process.env.CORS_ADDITIONAL_ORIGINS.split(',').map(o => o.trim());
+    baseOrigins.push(...additionalOrigins);
+  }
+  
+  // In development, allow localhost variations
+  if (process.env.NODE_ENV === 'development') {
+    baseOrigins.push('http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:3001');
+  }
+  
+  return baseOrigins;
+};
+
 const io = new Server(server, {
   cors: {
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
-    methods: ["GET", "POST", "PUT", "DELETE"]
+    origin: getAllowedOrigins(),
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
   }
 });
 
@@ -40,11 +59,12 @@ if (process.env.NODE_ENV === 'development') {
 // Middleware
 app.use(generalLimiter);
 app.use(cors({
-  origin: config.FRONTEND_URL || 'http://localhost:3000',
+  origin: getAllowedOrigins(),
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  optionsSuccessStatus: 200
+  optionsSuccessStatus: 200,
+  preflightContinue: false
 }));
 app.use(cookieParser());
 app.use(express.json());

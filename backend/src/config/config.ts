@@ -59,9 +59,19 @@ export const config = {
   // Security
   PASSWORD_MIN_LENGTH: parseInt(process.env.PASSWORD_MIN_LENGTH || '8'),
   
-  // JWT Secrets (for backward compatibility)
-  JWT_SECRET: process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production',
-  JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET || 'your-super-secret-refresh-key-change-in-production',
+  // JWT Secrets (for backward compatibility) - These fallbacks should NEVER be used in production
+  JWT_SECRET: process.env.JWT_SECRET || (() => {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('JWT_SECRET must be set in production environment');
+    }
+    return 'dev-jwt-secret-change-in-production';
+  })(),
+  JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET || (() => {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('JWT_REFRESH_SECRET must be set in production environment');
+    }
+    return 'dev-jwt-refresh-secret-change-in-production';
+  })(),
   
   // Backup
   BACKUP_RETENTION_DAYS: parseInt(process.env.BACKUP_RETENTION_DAYS || '30'),

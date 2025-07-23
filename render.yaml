@@ -1,11 +1,4 @@
 services:
-  # Database
-  - type: pserv
-    name: escashop-database
-    env: docker
-    plan: free
-    dockerfilePath: ./database/Dockerfile
-    
   # Backend API
   - type: web
     name: escashop-backend
@@ -34,17 +27,17 @@ services:
       - key: SMS_ENABLED
         value: true
       - key: VONAGE_API_KEY
-        value: 24580886
+        sync: false
       - key: VONAGE_API_SECRET
-        value: 0YSON3xZYOEWYLyf
+        sync: false
       - key: EMAIL_SERVICE_ENABLED
         value: true
       - key: EMAIL_SERVICE
         value: gmail
       - key: EMAIL_USER
-        value: jefor16@gmail.com
+        sync: false
       - key: EMAIL_PASSWORD
-        value: cutbcijqacobypak
+        sync: false
 
   # Frontend
   - type: web
